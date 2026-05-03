@@ -22,6 +22,7 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: 0;
 }
 
 .bg span {
@@ -29,6 +30,7 @@ body {
   font-size: 30px;
   opacity: 0.25;
   animation: float 10s linear infinite;
+  pointer-events: none;
 }
 
 @keyframes float {
@@ -38,6 +40,8 @@ body {
 
 /* BOX */
 .box {
+  position: relative;
+  z-index: 10;
   background: rgba(255,255,255,0.7);
   padding: 25px;
   border-radius: 16px;
@@ -64,6 +68,9 @@ input {
   border-radius: 10px;
   border: none;
   text-align: center;
+  position: relative;
+  z-index: 20;
+  font-size: 16px;
 }
 
 /* BUTTON */
@@ -106,11 +113,10 @@ a {
   <h2 id="title">Úkol č.2</h2>
   <span class="note" id="note">(malá písmena a s mezerou)</span>
 
-  <input id="input">
+  <input id="input" type="text" autocomplete="off">
   <button id="btn" onclick="check()">Potvrdit</button>
 
   <div id="msg">Gratuluji 🎉</div>
-
   <div id="linkBox"></div>
 </div>
 
@@ -124,6 +130,14 @@ for (let i = 0; i < 30; i++) {
   s.style.left = Math.random()*100 + "%";
   s.style.animationDuration = (6 + Math.random()*10) + "s";
   hearts.appendChild(s);
+}
+
+/* 🔧 odstranění diakritiky */
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
 let step = 2;
@@ -152,7 +166,7 @@ function showCongrats(nextStep, titleText, noteText) {
 }
 
 function check() {
-  let val = document.getElementById("input").value.toLowerCase();
+  let val = normalizeText(document.getElementById("input").value);
 
   if (step === 2) {
     if (val === "cokoladovna janek") {
@@ -161,19 +175,19 @@ function check() {
   }
 
   else if (step === 3) {
-    if (val === "adelitas lucemburská!") {
+    if (val === "adelitas lucemburska") {
       showCongrats(4, "Úkol č.4", null);
     } else alert("Špatně!");
   }
 
   else if (step === 4) {
-    if (val === "podívej se do dárkové tašky") {
+    if (val === "podivej se do darkove tasky") {
       showCongrats(5, "Úkol č.5", "(malá písmena)");
     } else alert("Špatně!");
   }
 
   else if (step === 5) {
-    if (val === "automat matuška") {
+    if (val === "automat matuska") {
 
       document.getElementById("msg").style.display = "block";
 
@@ -193,6 +207,7 @@ function check() {
     } else alert("Špatně!");
   }
 }
+
 </script>
 
 </body>
