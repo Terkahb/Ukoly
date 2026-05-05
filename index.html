@@ -22,7 +22,6 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 0;
 }
 
 .bg span {
@@ -30,7 +29,6 @@ body {
   font-size: 30px;
   opacity: 0.25;
   animation: float 10s linear infinite;
-  pointer-events: none;
 }
 
 @keyframes float {
@@ -40,8 +38,6 @@ body {
 
 /* BOX */
 .box {
-  position: relative;
-  z-index: 10;
   background: rgba(255,255,255,0.7);
   padding: 25px;
   border-radius: 16px;
@@ -68,9 +64,6 @@ input {
   border-radius: 10px;
   border: none;
   text-align: center;
-  position: relative;
-  z-index: 20;
-  font-size: 16px;
 }
 
 /* BUTTON */
@@ -83,17 +76,6 @@ button {
   background: #8c6a5d;
   color: white;
   cursor: pointer;
-}
-
-/* LINK */
-a {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 15px;
-  background: #8c6a5d;
-  color: white;
-  border-radius: 10px;
-  text-decoration: none;
 }
 
 /* GRATULUJI */
@@ -113,11 +95,10 @@ a {
   <h2 id="title">Úkol č.2</h2>
   <span class="note" id="note">(malá písmena a s mezerou)</span>
 
-  <input id="input" type="text" autocomplete="off">
+  <input id="input">
   <button id="btn" onclick="check()">Potvrdit</button>
 
   <div id="msg">Gratuluji 🎉</div>
-  <div id="linkBox"></div>
 </div>
 
 <script>
@@ -132,18 +113,11 @@ for (let i = 0; i < 30; i++) {
   hearts.appendChild(s);
 }
 
-/* 🔧 odstranění diakritiky */
-function normalizeText(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
-
 let step = 2;
 
 function showCongrats(nextStep, titleText, noteText) {
   const msg = document.getElementById("msg");
+  msg.innerText = "Gratuluji 🎉";
   msg.style.display = "block";
 
   setTimeout(() => {
@@ -166,7 +140,7 @@ function showCongrats(nextStep, titleText, noteText) {
 }
 
 function check() {
-  let val = normalizeText(document.getElementById("input").value);
+  let val = document.getElementById("input").value.toLowerCase();
 
   if (step === 2) {
     if (val === "cokoladovna janek") {
@@ -175,39 +149,35 @@ function check() {
   }
 
   else if (step === 3) {
-    if (val === "adelitas lucemburska") {
+    if (val === "adelitas lucemburská!") {
       showCongrats(4, "Úkol č.4", null);
     } else alert("Špatně!");
   }
 
   else if (step === 4) {
-    if (val === "podivej se do darkove tasky") {
+    if (val === "podívej se do dárkové tašky") {
       showCongrats(5, "Úkol č.5", "(malá písmena)");
     } else alert("Špatně!");
   }
 
   else if (step === 5) {
-    if (val === "automat matuska") {
+    if (val === "automat matuška") {
+      showCongrats(6, "Úkol č.6", "zadej slovo na 4 písmena - kam jedeme teď?");
+    } else alert("Špatně!");
+  }
 
-      document.getElementById("msg").style.display = "block";
+  else if (step === 6) {
+    if (val === "domů") { 
+      const msg = document.getElementById("msg");
+      msg.innerText = "Jseš nejšikovnější luštitel! Čeká tě překvapení ve schránce! ❤️";
+      msg.style.display = "block";
 
-      setTimeout(() => {
-        document.getElementById("msg").style.display = "none";
-
-        document.getElementById("title").innerText = "Úkol č.6";
-        document.getElementById("note").style.display = "none";
-        document.getElementById("input").style.display = "none";
-        document.getElementById("btn").style.display = "none";
-
-        document.getElementById("linkBox").innerHTML =
-          '<a href="https://terkahb.github.io/Tajna-stranka/" target="_blank">Pokračovat 💌</a>';
-
-      }, 1500);
-
+      document.getElementById("input").style.display = "none";
+      document.getElementById("btn").style.display = "none";
+      document.getElementById("note").style.display = "none";
     } else alert("Špatně!");
   }
 }
-
 </script>
 
 </body>
