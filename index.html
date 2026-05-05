@@ -19,10 +19,13 @@ body {
 
 /* ❤️ SRDÍČKA */
 .bg {
-  position: absolute;
+  position: fixed; /* 🔥 změna z absolute */
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* 🔥 FIX pro Safari */
+  pointer-events: none;
+  z-index: 0;
 }
 
 .bg span {
@@ -40,8 +43,8 @@ body {
 /* BOX */
 .box {
   position: relative;
-  z-index: 1; /* 🔥 aby byl nad srdíčky */
-  background: rgba(255,255,255,0.7);
+  z-index: 10; /* 🔥 musí být vysoko */
+  background: rgba(255,255,255,0.9);
   padding: 25px;
   border-radius: 16px;
   text-align: center;
@@ -49,39 +52,29 @@ body {
   max-width: 340px;
 }
 
-/* TEXT */
-h2 { margin: 0; }
-
-.note {
-  display: block;
-  font-size: 12px;
-  opacity: 0.7;
-  margin-top: 5px;
-}
-
 /* INPUT */
 input {
   margin-top: 10px;
-  padding: 10px;
+  padding: 12px;
   width: 90%;
   border-radius: 10px;
-  border: none;
+  border: 1px solid #ccc;
   text-align: center;
+  font-size: 16px; /* 🔥 důležité pro iOS (jinak zoom/bugy) */
 }
 
 /* BUTTON */
 button {
   margin-top: 10px;
-  padding: 10px;
+  padding: 12px;
   width: 90%;
   border: none;
   border-radius: 10px;
   background: #8c6a5d;
   color: white;
-  cursor: pointer;
+  font-size: 16px;
 }
 
-/* GRATULUJI */
 #msg {
   margin-top: 15px;
   font-weight: bold;
@@ -96,10 +89,10 @@ button {
 
 <div class="box">
   <h2 id="title">Úkol č.2</h2>
-  <span class="note" id="note">(malá písmena a s mezerou)</span>
+  <span id="note">(malá písmena a s mezerou)</span><br>
 
-  <input id="input">
-  <button id="btn" onclick="check()">Potvrdit</button>
+  <input id="input" type="text" autocomplete="off">
+  <button onclick="check()">Potvrdit</button>
 
   <div id="msg">Gratuluji 🎉</div>
 </div>
@@ -118,7 +111,7 @@ for (let i = 0; i < 30; i++) {
 
 let step = 2;
 
-/* 🔥 normalizace textu (Safari fix na diakritiku) */
+/* normalizace */
 function normalizeText(text) {
   return text
     .toLowerCase()
@@ -127,6 +120,11 @@ function normalizeText(text) {
     .trim();
 }
 
+/* 🔥 Safari fix – kliknutí dá focus */
+document.addEventListener("click", () => {
+  document.getElementById("input").focus();
+});
+
 function showCongrats(nextStep, titleText, noteText) {
   const msg = document.getElementById("msg");
   msg.innerText = "Gratuluji 🎉";
@@ -134,21 +132,11 @@ function showCongrats(nextStep, titleText, noteText) {
 
   setTimeout(() => {
     msg.style.display = "none";
-
     document.getElementById("title").innerText = titleText;
     document.getElementById("input").value = "";
-
-    const note = document.getElementById("note");
-
-    if (noteText) {
-      note.style.display = "block";
-      note.innerText = noteText;
-    } else {
-      note.style.display = "none";
-    }
-
+    document.getElementById("note").innerText = noteText || "";
     step = nextStep;
-  }, 1500);
+  }, 1200);
 }
 
 function check() {
@@ -162,7 +150,7 @@ function check() {
 
   else if (step === 3) {
     if (val === "adelitas lucemburska!") {
-      showCongrats(4, "Úkol č.4", null);
+      showCongrats(4, "Úkol č.4", "");
     } else alert("Špatně!");
   }
 
@@ -185,8 +173,6 @@ function check() {
       msg.style.display = "block";
 
       document.getElementById("input").style.display = "none";
-      document.getElementById("btn").style.display = "none";
-      document.getElementById("note").style.display = "none";
     } else alert("Špatně!");
   }
 }
